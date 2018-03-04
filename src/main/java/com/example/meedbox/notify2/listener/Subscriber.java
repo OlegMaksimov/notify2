@@ -1,5 +1,6 @@
 package com.example.meedbox.notify2.listener;
 
+import com.example.meedbox.notify2.DAO.ConnectionJDBC;
 import oracle.jdbc.OracleConnection;
 import oracle.jdbc.dcn.DatabaseChangeEvent;
 import oracle.jdbc.dcn.DatabaseChangeListener;
@@ -11,7 +12,8 @@ import java.util.Properties;
 public class Subscriber implements DatabaseChangeListener {
 
     String name;
-    OracleConnection connection;
+    public static final OracleConnection connection = ConnectionJDBC.getConnection();
+
     DatabaseChangeRegistration changeRegistration;
     String sql;
     Properties properties;
@@ -26,10 +28,6 @@ public class Subscriber implements DatabaseChangeListener {
 
     public OracleConnection getConnection() {
         return connection;
-    }
-
-    public void setConnection(OracleConnection connection) {
-        this.connection = connection;
     }
 
     public DatabaseChangeRegistration getChangeRegistration() {
@@ -55,8 +53,10 @@ public class Subscriber implements DatabaseChangeListener {
     public Subscriber(String name, String sql) {
         this.name = name;
         this.sql = sql;
-        this.properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
-        this.properties.setProperty(OracleConnection.DCN_QUERY_CHANGE_NOTIFICATION, "true");
+        Properties properties = new Properties();
+        properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
+        properties.setProperty(OracleConnection.DCN_QUERY_CHANGE_NOTIFICATION, "true");
+        this.properties = properties;
         try {
             this.changeRegistration = connection.registerDatabaseChangeNotification(properties);
         } catch (SQLException e) {
@@ -77,9 +77,8 @@ public class Subscriber implements DatabaseChangeListener {
         }
     }
 
-    public Subscriber(String name, OracleConnection connection, Properties properties) {
+    public Subscriber(String name, Properties properties) {
         this.name = name;
-        this.connection = connection;
         this.properties = properties;
         try {
             this.changeRegistration = connection.registerDatabaseChangeNotification(properties);

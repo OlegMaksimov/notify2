@@ -6,9 +6,12 @@ import com.example.meedbox.notify2.service.ListenerService;
 import oracle.jdbc.dcn.DatabaseChangeRegistration;
 import oracle.jdbc.driver.OracleConnection;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -37,10 +40,19 @@ public class ManagerApplication {
         listSubscriber.forEach((k, v) -> ListenerService.addListener(v));
     }
 
-    public Map getListSubscribe(Path path) {
-
+    public Map<String, Subscriber> getListSubscribe(Path path) {
         Map<String, Subscriber> map = new HashMap<>();
-
+        try {
+            List<String> subsrcibeList = Files.readAllLines(path);
+            subsrcibeList.forEach((s1) ->
+            {
+                map.put(s1.substring(0, s1.indexOf("|")),
+                        new Subscriber(s1.substring(0, s1.indexOf("|")),
+                                s1.substring(s1.indexOf("|") + 1)));
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return map;
     }
 

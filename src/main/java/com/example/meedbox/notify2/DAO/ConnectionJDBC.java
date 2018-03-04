@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class ConnectionJDBC {
     private OracleConnection connection;
-    private String url, user, password;
+    private static String url = "jdbc:oracle:thin:@localhost:49161:xe", user = "HR", password = "oracle";
 
     private ConnectionJDBC() {
     }
@@ -48,8 +48,13 @@ public class ConnectionJDBC {
         this.password = password;
     }
 
-    public OracleConnection getConnection() throws SQLException {
+    public static OracleConnection getConnection() {
         Locale.setDefault(Locale.ENGLISH);
-        return (OracleConnection) DriverManager.getConnection(url, user, password);
+        try {
+            return (OracleConnection) DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
