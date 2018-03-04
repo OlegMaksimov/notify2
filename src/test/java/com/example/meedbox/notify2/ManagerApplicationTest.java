@@ -1,5 +1,6 @@
 package com.example.meedbox.notify2;
 
+import com.example.meedbox.notify2.listener.Subscriber;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,10 +15,12 @@ import static org.junit.Assert.assertNotNull;
  */
 public class ManagerApplicationTest {
     ManagerApplication managerApplication;
+    Path path;
 
     @Before
     public void setUp() throws Exception {
         managerApplication = new ManagerApplication();
+        path = Paths.get("tmp.txt");
     }
 
     @Test
@@ -27,13 +30,13 @@ public class ManagerApplicationTest {
 
     @Test
     public void subscibeNotification() throws Exception {
+        Map<String, Subscriber> map = managerApplication.getListSubscribe(path);
+        managerApplication.subscibeNotification(map);
 
     }
 
     @Test
     public void getListSubscribe() throws Exception {
-        Path path = Paths.get("tmp.txt");
-        System.out.println(path.toAbsolutePath());
         Map map = managerApplication.getListSubscribe(path);
         assertNotNull(map);
 

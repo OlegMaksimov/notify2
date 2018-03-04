@@ -56,6 +56,7 @@ public class Subscriber implements DatabaseChangeListener {
         Properties properties = new Properties();
         properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
         properties.setProperty(OracleConnection.DCN_QUERY_CHANGE_NOTIFICATION, "true");
+        properties.setProperty(OracleConnection.NTF_TIMEOUT, "50");
         this.properties = properties;
         try {
             this.changeRegistration = connection.registerDatabaseChangeNotification(properties);
@@ -67,9 +68,11 @@ public class Subscriber implements DatabaseChangeListener {
     public Subscriber(String name, String sql, String timeOut) {
         this.name = name;
         this.sql = sql;
-        this.properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
-        this.properties.setProperty(OracleConnection.DCN_QUERY_CHANGE_NOTIFICATION, "true");
-        this.properties.setProperty(OracleConnection.NTF_TIMEOUT, timeOut);
+        Properties properties = new Properties();
+        properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
+        properties.setProperty(OracleConnection.DCN_QUERY_CHANGE_NOTIFICATION, "true");
+        properties.setProperty(OracleConnection.NTF_TIMEOUT, timeOut);
+        this.properties = properties;
         try {
             this.changeRegistration = connection.registerDatabaseChangeNotification(properties);
         } catch (SQLException e) {

@@ -1,1 +1,2 @@
 job | select JOB_TITLE from JOBS
+REGIONS | select REGION_NAME from REGIONS
