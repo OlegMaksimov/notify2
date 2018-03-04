@@ -4,12 +4,13 @@ import oracle.jdbc.driver.OracleConnection;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class ConnectionJDBC {
     private OracleConnection connection;
     private String url, user, password;
 
-    public ConnectionJDBC() {
+    private ConnectionJDBC() {
     }
 
     public ConnectionJDBC(String url, String user, String password) {
@@ -47,7 +48,8 @@ public class ConnectionJDBC {
         this.password = password;
     }
 
-    public OracleConnection getConnection(String url, String user, String pass) throws SQLException {
-        return (OracleConnection) DriverManager.getConnection(url,user, pass);
+    public OracleConnection getConnection() throws SQLException {
+        Locale.setDefault(Locale.ENGLISH);
+        return (OracleConnection) DriverManager.getConnection(url, user, password);
     }
 }
