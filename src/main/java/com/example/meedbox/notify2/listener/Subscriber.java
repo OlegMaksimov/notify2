@@ -1,4 +1,4 @@
-package com.example.meedbox.notify2.factory;
+package com.example.meedbox.notify2.listener;
 
 import oracle.jdbc.OracleConnection;
 import oracle.jdbc.dcn.DatabaseChangeEvent;
@@ -8,7 +8,7 @@ import oracle.jdbc.dcn.DatabaseChangeRegistration;
 import java.sql.SQLException;
 import java.util.Properties;
 
-class ListenerDB implements DatabaseChangeListener {
+public class Subscriber implements DatabaseChangeListener {
 
     String name;
     OracleConnection connection;
@@ -52,7 +52,7 @@ class ListenerDB implements DatabaseChangeListener {
         this.properties = properties;
     }
 
-    public ListenerDB(String name, String sql) {
+    public Subscriber(String name, String sql) {
         this.name = name;
         this.sql = sql;
         this.properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
@@ -64,7 +64,7 @@ class ListenerDB implements DatabaseChangeListener {
         }
     }
 
-    public ListenerDB(String name, String sql, String timeOut) {
+    public Subscriber(String name, String sql, String timeOut) {
         this.name = name;
         this.sql = sql;
         this.properties.setProperty(OracleConnection.DCN_NOTIFY_ROWIDS, "true");
@@ -77,7 +77,7 @@ class ListenerDB implements DatabaseChangeListener {
         }
     }
 
-    public ListenerDB(String name, OracleConnection connection, Properties properties) {
+    public Subscriber(String name, OracleConnection connection, Properties properties) {
         this.name = name;
         this.connection = connection;
         this.properties = properties;
@@ -88,8 +88,9 @@ class ListenerDB implements DatabaseChangeListener {
         }
     }
 
-    public void onDatabaseChangeNotification(DatabaseChangeEvent databaseChangeEvent) {
-        System.out.println("This is "+ name);
-    }
 
+    @Override
+    public void onDatabaseChangeNotification(DatabaseChangeEvent databaseChangeEvent) {
+        System.out.println("This is " + name);
+    }
 }

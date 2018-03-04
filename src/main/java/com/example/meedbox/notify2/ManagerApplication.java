@@ -1,12 +1,14 @@
 package com.example.meedbox.notify2;
 
 import com.example.meedbox.notify2.DAO.ConnectionJDBC;
+import com.example.meedbox.notify2.listener.Subscriber;
 import com.example.meedbox.notify2.service.ListenerService;
 import oracle.jdbc.dcn.DatabaseChangeRegistration;
 import oracle.jdbc.driver.OracleConnection;
 
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -23,7 +25,7 @@ public class ManagerApplication {
 
     public OracleConnection getConnection(String url, String user, String pass) throws SQLException {
         if (this.connection == null)
-            this.connection = new ConnectionJDBC().getConnection(url,user,pass);
+            this.connection = new ConnectionJDBC(url, user, pass).getConnection();
         return connection;
     }
 
@@ -31,12 +33,15 @@ public class ManagerApplication {
         return connection.registerDatabaseChangeNotification(properties);
     }
 
-    public void subscibeNotification(Map listSubscriber) {
-        listSubscriber.forEach((k,v)->ListenerService.addListener());
+    public void subscibeNotification(Map<String, Subscriber> listSubscriber) {
+        listSubscriber.forEach((k, v) -> ListenerService.addListener(v));
     }
 
     public Map getListSubscribe(Path path) {
-        return null;
+
+        Map<String, Subscriber> map = new HashMap<>();
+
+        return map;
     }
 
 }

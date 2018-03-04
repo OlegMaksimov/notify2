@@ -1,29 +1,25 @@
 package com.example.meedbox.notify2.service;
 
+import com.example.meedbox.notify2.listener.Subscriber;
 import oracle.jdbc.OracleStatement;
-import oracle.jdbc.dcn.DatabaseChangeListener;
-import oracle.jdbc.dcn.DatabaseChangeRegistration;
-import oracle.jdbc.driver.OracleConnection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.example.meedbox.notify2.factory.*;
-import java.util.Properties;
 
 public class ListenerService {
 
-   public static void addListener(ListenerDB listener) {
+    public static void addListener(Subscriber subscriber) {
 
        try {
-           changeRegistration.addListener(listener);
-           try(Statement stmt = listener.createStatement()) {
-               ((OracleStatement) stmt).setDatabaseChangeRegistration(changeRegistration);
-               try (ResultSet rs = stmt.executeQuery(sql)) {
+           subscriber.getChangeRegistration().addListener(subscriber);
+           try (Statement stmt = subscriber.getConnection().createStatement()) {
+               ((OracleStatement) stmt).setDatabaseChangeRegistration(subscriber.getChangeRegistration());
+               try (ResultSet rs = stmt.executeQuery(subscriber.getSql())) {
 
                }
            }
-           String[] tableNames = changeRegistration.getTables();
+           String[] tableNames = subscriber.getChangeRegistration().getTables();
            for (int i = 0; i < tableNames.length; i++) {
                System.out.println(tableNames[i] + " has been registered.");
            }
